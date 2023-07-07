@@ -1,0 +1,35 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 225px;
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+.sidebar header {
+  /* background: linear-gradient(40deg,  #468CEF 0%, #5F90F2 20%, #AD3EE3 50%, #EC9C8C 100%, #DC5189 100%); */
+  background: linear-gradient(100deg,  #468CEF 0%, #5F90F2 10%, #AD3EE3 50%, #DC5189 75%, #EC9C8C 100%);
+  border-radius: 10px;
+  padding: 50px 20px 20px 20px;
+  border-radius: 10px;
+}
+
+.sidebar header h1 {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+}
+
+.sidebar header h2 {
+  font-size: 10px;
+  font-weight: 400;
+  margin-top: 5px;
+  color: #D1DCFA;
+}
+
+.sidebar section {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+}

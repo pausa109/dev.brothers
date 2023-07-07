@@ -1,0 +1,113 @@
+.container {
+  display: flex;
+  gap: 28px;
+}
+
+.main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.topbarContent {
+  background-color: #373E68;
+  height: 25px;
+  border-radius: 10px 10px 0px 0px;
+  padding: 20px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbarContent section {
+  display: flex;
+  gap: 15px;
+}
+
+.topbarContent section h1 {
+  color: white;
+  margin-right: 10px;
+}
+
+.topbarContent section div {
+  display: flex;
+  align-items: center;
+}
+
+.topbarContent section div h2 {
+  font-size: 10px;
+  font-weight: 400;
+  color: #D1DCFA;
+  margin-right: 8px;
+}
+
+.topbarContent section div h3 {
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  margin-right: 2px;
+}
+
+.topbarProgress {
+  background: linear-gradient(to right, #F49E85 20%, #DF4E85 40%, #7FC9FB 60%);
+  height: 5px;
+  border-radius: 0px 0px 10px 10px;
+}
+
+.addTaskButton {
+  width: 140px;
+  height: 40px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  background-color: #AE1FEB;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.taskList {
+  display: flex;
+  gap: 30px;
+}
+
+.taskList section {
+  width: 33.3%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.taskList section h1 {
+  color: #3B4374;
+}
+
+
+
+.taskList .circle {
+  height: 10px;
+  width: 10px;
+}
+
+.circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.option {
+  background-color: #F2F4FF;
+  font-size: 9px;
+  font-weight: 700;
+  color: #4661E7;
+  border-radius: 10px;
+  padding: 10px 15px;
+  align-self: flex-start;
+}
+
+.selected {
+  background-color: #4661E7;
+  color: white;
+}

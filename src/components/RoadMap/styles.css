@@ -1,0 +1,41 @@
+.roadMap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.roadMap h1 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #3B4374;
+}
+
+.roadMap h2 {
+  font-size: 10px;
+  font-weight: 400;
+  color: #949DB7;
+}
+
+.roadMap h3 {
+  font-size: 10px;
+  font-weight: 700;
+  color: #637196;
+}
+
+.roadMap div div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.roadMap div div div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}

@@ -1,0 +1,294 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  margin: 0;
+}
+
+body {
+  font-family: 'Space Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin-top: 50px;
+  background-color: #F7F8FD;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+}
+
+.main {
+  background-color: white;
+  padding: 50px 50px;
+  width: 700px;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.main h1 {
+  color: #373E68;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.starCircle {
+  background: linear-gradient(30deg,  #468CEF 0%, #5F90F2 10%, #AD3EE3 50%, #DC5189 75%, #EC9C8C 100%);
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  position: absolute;
+  left: 50px;
+  top: -20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toBack {
+  width: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.toBack h3 {
+  font-weight: 400;
+  font-size: 12px;
+  color: #373E68;
+}
+
+input[type="text"]:active {
+  outline: none;
+  border: none;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border: none;
+}
+
+input[type="text"]:hover {
+  outline: none;
+  border: none;
+}
+
+input[type="text"] {
+  font-family: 'Space Mono', monospace;
+  border: none;
+  background-color: #F6F8FC;
+  width: 100%;
+  height: 70px;
+  border-radius: 5px;
+  margin-top: 15px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  color: #373E68;
+}
+
+.titleField input {
+  font-weight: 700;
+}
+
+div h2 {
+  color: #373E68;
+  font-size: 16px;
+}
+
+div h3 {
+  color: #9CA4BC;
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.categoryField h3 {
+  margin-bottom: 15px;
+}
+
+.descField input {
+  height: 120px !important;
+}
+
+.buttonField {
+  background: linear-gradient(30deg,  #468CEF 0%, #5F90F2 10%, #AD3EE3 50%, #DC5189 75%, #EC9C8C 100%);
+  padding: 10px 20px;
+  border-radius: 5px;
+  position: absolute;
+  top: calc(100% - 20px);
+  right: 50px;
+}
+
+.buttonField h3 {
+  color: white;
+}
+
+.timeField h3 {
+  margin-bottom: 15px;
+}
+
+input[type="date"] {
+  border: none;
+  background-color: transparent;
+  padding: 10px 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 15px;
+  color: #373E68;
+  font-weight: 700;
+}
+
+input[type="date"]:focus {
+  outline: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 2;
+}
+
+.timeField {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeEditorField {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.dateContainer {
+  background-color: #F6F8FC;
+  border-radius: 5px;
+  position: relative;
+  flex-grow: 0;
+  align-self: flex-start;
+}
+
+.dateIcon {
+  position: absolute;
+  left: calc(100% - 45px);
+  top: calc(50% - 10px);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.dateBackground {
+  position: absolute;
+  background: linear-gradient(30deg,  #468CEF 0%, #5F90F2 10%, #AD3EE3 50%, #DC5189 75%, #EC9C8C 100%);
+  padding: 10px;
+  border-radius: 5px;
+  left: calc(100% - 46.8px);
+  top: calc(50% - 9.6px);
+}
+
+.ownerNameField input {
+  padding-left: 40px;
+}
+
+input[type="time"] {
+  border: none;
+  background-color: transparent;
+  padding: 10px 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 15px;
+  color: #373E68;
+  font-weight: 700;
+}
+
+input[type="time"]:focus {
+  outline: none;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 2;
+}
+
+.timeContainer {
+  background-color: #F6F8FC;
+  border-radius: 5px;
+  position: relative;
+  flex-grow: 0;
+  align-self: flex-start;
+}
+
+.timeIcon {
+  position: absolute;
+  left: calc(100% - 43.8px);
+  top: calc(50% - 11px);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.timeBackground {
+  position: absolute;
+  background: linear-gradient(30deg,  #468CEF 0%, #5F90F2 10%, #AD3EE3 50%, #DC5189 75%, #EC9C8C 100%);
+  padding: 10px;
+  border-radius: 5px;
+  left: calc(100% - 46.8px);
+  top: calc(50% - 9.6px);
+}
+
+.ownerNameContainer {
+  position: relative;
+}
+
+.ownerNameContainer h3 {
+  position: absolute;
+  right: calc(100% - 25px);
+  top: calc(50% - 5px);
+  font-weight: 700;
+  color: #373E68;
+  font-size: 15px;
+}
+
+.sendFileContainer {
+  background-color: #F6F8FC;
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  position: relative;
+}
+
+.sendTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.sendTitle h3 {
+  color: #373E68;
+  font-weight: 700;
+}
+
+.sendFileContainer input[type="file"] {
+  border: none;
+  outline: none;
+}
+
+.sendFileButton {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}

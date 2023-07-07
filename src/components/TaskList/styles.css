@@ -1,0 +1,101 @@
+.taskBar {
+  height: 5px;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.taskInfo {
+  background-color: white;
+  padding: 20px;
+  border-radius: 0px 0px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.taskInfo h2 {
+  color: #9CA4BC;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.taskGeneralInfo {
+  display: flex;
+  justify-content: space-between;
+}
+
+.taskTypeTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.taskTypeTitle h3 {
+  color: #9CA4BC;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.taskEditOptions {
+  display: flex;
+  gap: 10px;
+}
+
+.taskDesc {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.taskDesc h3 {
+  color: #9CA4BC;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.taskDates {
+  display: flex;
+  gap: 15px;
+}
+
+.taskDates div {
+  display: flex;
+  gap: 3px;
+}
+
+.taskCategory {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.taskOwner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.taskOwner div {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-size: cover;
+  border: solid 2px #7FC9FB;
+}
+
+.taskOwner h3 {
+  color: #3B4374;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.taskInfo {
+  position: relative;
+}
+
+.taskInfo iframe {
+  opacity: 0;
+  position: absolute;
+  top: 95%;
+  right: 0%;
+}

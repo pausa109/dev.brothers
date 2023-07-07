@@ -1,0 +1,15 @@
+.filterOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.option {
+  background-color: #F2F4FF;
+  font-size: 9px;
+  font-weight: 700;
+  color: #4661E7;
+  border-radius: 10px;
+  padding: 10px 15px;
+  align-self: flex-start;
+}
