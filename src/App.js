@@ -11,18 +11,14 @@ function App() {
     { category: 'Completed', count: 0, color: '#7FC9FB' },
   ];
 
-  // const ownerListStatic = [
-  //   { name: 'Rudinei Goularte', url: 'https://i.ibb.co/C8jswQC/rudinei.jpg' },
-  // ];
 
 
-  const [categoryList] = useState(categoryListStatic);
+
   const [categoryCount, setCategoryCount] = useState(() => {
     const savedCategoryCount = JSON.parse(localStorage.getItem('categoryCount'));
     return savedCategoryCount || categoryCountStatic;
   });
   
-  const [ownerList] = useState(ownerListStatic);
   const [tasksData, setTasksData] = useState(JSON.parse(localStorage.getItem('tasksData')) || []);
 
   const [webStage, setWebStage] = useState(0);
@@ -146,6 +142,11 @@ function App() {
       prevState.map((task) => {
         if (task.id === taskId) {
           const previousTaskType = task.taskType;
+          const deadlineDate = new Date(
+            `${task.dates.find((d) => d.type === 'deadlineDate').date}T${
+              task.dates.find((d) => d.type === 'deadlineDate').time
+            }:00`
+          );
 
 
           if (previousTaskType === 'Completed') {
