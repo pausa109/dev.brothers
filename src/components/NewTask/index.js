@@ -18,7 +18,6 @@ function NewTask({ webStage, setWebStage, newTask, setTask, updateTasksData }) {
     setSelectedItens(event);
     const originalArray = event;
     const transformedArray = originalArray.map((item) => item.label);
-    console.log(transformedArray);
     setTask({ ...newTask, category: transformedArray });
   };
 
@@ -67,36 +66,46 @@ function NewTask({ webStage, setWebStage, newTask, setTask, updateTasksData }) {
     });
   };
 
-  const [taskOwnerName, setTaskOwnerName] = useState('');
+  // const [taskOwnerName, setTaskOwnerName] = useState('');
 
-  const updateTaskOwnerName = (event) => {
-    setTaskOwnerName(event.target.value);
-    setTask({
-      ...newTask,
-      owner: { ...newTask.owner, name: event.target.value },
-    });
-  };
+  // const updateTaskOwnerName = (event) => {
+  //   setTaskOwnerName(event.target.value);
+  //   setTask({
+  //     ...newTask,
+  //     owner: { ...newTask.owner, name: event.target.value },
+  //   });
+  // };
 
-  const [ownerPhotoName, setOwnerPhotoName] = useState('');
+  // const [ownerPhotoName, setOwnerPhotoName] = useState('');
 
-  const handleFileChange = (event) => {
-    const { files } = event.target;
-    if (files.length > 0) {
-      const file = event.target.files[0];
-      setOwnerPhotoName(file.name);
-    }
-  };
+  // const handleFileChange = (event) => {
+  //   const { files } = event.target;
+  //   if (files.length > 0) {
+  //     const file = event.target.files[0];
+  //     setOwnerPhotoName(file.name);
+  //   }
+  // };
 
   const [taskMusic, setTaskMusic] = useState('');
 
   const updateTaskMusic = (event) => {
     setTaskMusic(event.target.value);
     setTask({ ...newTask, music: event.target.value });
-    console.log(event.target.value);
   };
 
-  const conferencia = () => {
-    console.log(newTask);
+  const [ownerInfo, setOwnerInfo] = useState({
+    name: '',
+    photoUrl: '',
+  });
+
+  const updateTaskOwner = (objeto) => {
+    if (objeto.name !== '' && objeto.photoUrl !== '') {
+      setOwnerInfo(objeto);
+      setTask({
+        ...newTask,
+        owner: objeto,
+      });
+    }
   };
 
   return (
@@ -120,13 +129,13 @@ function NewTask({ webStage, setWebStage, newTask, setTask, updateTasksData }) {
           updateTaskDeadlineDate={updateTaskDeadlineDate}
           taskDeadlineTime={taskDeadlineTime}
           updateTaskDeadlineTime={updateTaskDeadlineTime}
-          taskOwnerName={taskOwnerName}
-          updateTaskOwnerName={updateTaskOwnerName}
-          ownerPhotoName={ownerPhotoName}
-          handleFileChange={handleFileChange}
+          // taskOwnerName={taskOwnerName}
+          // updateTaskOwnerName={updateTaskOwnerName}
+          ownerInfo={ownerInfo}
+          updateTaskOwner={updateTaskOwner}
+          // handleFileChange={handleFileChange}
           taskMusic={taskMusic}
           updateTaskMusic={updateTaskMusic}
-          conferencia={conferencia}
           updateTasksData={updateTasksData}
         />
       )}
