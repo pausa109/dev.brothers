@@ -31,27 +31,26 @@ function App() {
   const [webStage, setWebStage] = useState(0);
 
   const increaseCategoryCount = (taskType) => {
-    setCategoryCount(
-      categoryCount.map((item) =>
-        item.category === taskType ? item : { ...item, count: item.count + 1 }
+    setCategoryCount((prevCounts) =>
+      prevCounts.map((item) =>
+        item.category === taskType
+          ? { ...item, count: item.count + 1 }
+          : item
       )
     );
   };
+  
 
   const decreaseCategoryCount = (taskType) => {
-    setCategoryCount(
-      categoryCount.map((item) => {
-        console.log('----------');
-        console.log(taskType);
-        console.log('----------');
-        console.log(item);
-        console.log('----------');
-        return item.category === taskType
+    setCategoryCount((prevCounts) =>
+      prevCounts.map((item) =>
+        item.category === taskType
           ? { ...item, count: item.count - 1 }
-          : item;
-      })
+          : item
+      )
     );
   };
+  
 
   const calcularSomaCount = () => {
     let soma = 0;
@@ -101,12 +100,18 @@ function App() {
       ),
       taskType: createdDate > deadlineDate ? 'Due late' : 'In-Progress',
     };
-    increaseCategoryCount(
-      createdDate > deadlineDate ? 'Due late' : 'In-Progress'
-    );
+  
     addTasksData([...tasksData, updatedTask]);
+  
+    if (createdDate > deadlineDate) {
+      increaseCategoryCount('Due late');
+    } else {
+      increaseCategoryCount('In-Progress');
+    }
+  
     setWebStage(0);
   };
+  
 
   const deleteTask = (taskId, taskType) => {
     const newTasksData = tasksData.filter((task) => task.id !== taskId);
@@ -122,33 +127,14 @@ function App() {
     hours = hours < 10 ? `0${hours}` : hours;
     minutes = minutes < 10 ? `0${minutes}` : minutes;
     const currentTime = `${hours}:${minutes}`;
-
+  
     addTasksData((prevState) =>
       prevState.map((task) => {
         if (task.id === taskId) {
-          const deadlineDate = new Date(
-            `${task.dates.find((d) => d.type === 'deadlineDate').date}T${
-              task.dates.find((d) => d.type === 'deadlineDate').time
-            }:00`
-          );
-          if (task.taskType === 'Completed') {
+          const previousTaskType = task.taskType;
+  
+          if (previousTaskType === 'Completed') {
             decreaseCategoryCount('Completed');
-            if (now > deadlineDate) {
-              increaseCategoryCount('Due late');
-              return {
-                ...task,
-                taskType: 'Due late',
-                dates: task.dates.map((item) =>
-                  item.type === 'finishDate'
-                    ? {
-                        ...item,
-                        time: null,
-                        date: null,
-                      }
-                    : item
-                ),
-              };
-            }
             increaseCategoryCount('In-Progress');
             return {
               ...task,
@@ -164,6 +150,8 @@ function App() {
               ),
             };
           }
+  
+          decreaseCategoryCount(previousTaskType);
           increaseCategoryCount('Completed');
           return {
             ...task,
@@ -183,6 +171,8 @@ function App() {
       })
     );
   };
+  
+  
 
   useEffect(() => {
     const checkTaskStatus = () => {
