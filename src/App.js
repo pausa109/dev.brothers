@@ -11,14 +11,11 @@ function App() {
     { category: 'Completed', count: 0, color: '#7FC9FB' },
   ];
 
-
-
-
   const [categoryCount, setCategoryCount] = useState(() => {
     const savedCategoryCount = JSON.parse(localStorage.getItem('categoryCount'));
     return savedCategoryCount || categoryCountStatic;
   });
-  
+
   const [tasksData, setTasksData] = useState(JSON.parse(localStorage.getItem('tasksData')) || []);
 
   const [webStage, setWebStage] = useState(0);
@@ -95,9 +92,9 @@ function App() {
 
     const updatedTasksData = [...tasksData, updatedTask];
     setTasksData(updatedTasksData);
-  
+
     saveTasksToStorage(updatedTasksData);
-  
+
 
     if (createdDate > deadlineDate) {
       increaseCategoryCount('Due late');
@@ -244,6 +241,10 @@ function App() {
     checkTaskStatus();
   }, []);
 
+  const [selectedCategories, setSelectedCategories] = useState([
+    { name: 'All', selected: true },
+  ]);
+
   return (
     <div>
       {webStage === 0 ? (
@@ -255,6 +256,8 @@ function App() {
           deleteTask={deleteTask}
           handleTaskTypeChange={handleTaskTypeChange}
           calcularSomaCount={calcularSomaCount}
+          selectedCategories={selectedCategories}
+          setSelectedCategories={setSelectedCategories}
         />
       ) : (
         <NewTask
@@ -263,6 +266,7 @@ function App() {
           newTask={newTask}
           setTask={setTask}
           updateTasksData={updateTasksData}
+          selectedCategories={selectedCategories}
         />
       )}
     </div>

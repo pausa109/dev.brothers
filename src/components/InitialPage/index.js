@@ -13,11 +13,9 @@ function InitialPage({
   deleteTask,
   handleTaskTypeChange,
   calcularSomaCount,
+  selectedCategories,
+  setSelectedCategories,
 }) {
-  const [selectedCategories, setSelectedCategories] = useState([
-    { name: 'All', selected: true },
-  ]);
-
   const [filteredTasks, setFilteredTasks] = useState([]);
 
   useEffect(() => {
@@ -154,6 +152,13 @@ InitialPage.propTypes = {
   deleteTask: PropTypes.func.isRequired,
   handleTaskTypeChange: PropTypes.func.isRequired,
   calcularSomaCount: PropTypes.func.isRequired,
+  setSelectedCategories: PropTypes.func.isRequired,
+  selectedCategories: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      selected: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
 };
 
 export default InitialPage;

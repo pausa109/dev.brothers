@@ -15,12 +15,16 @@ function NewTaskInitial({
   taskDesc,
   updateTaskDesc,
   increaseNewTaskStage,
+  selectedCategories,
 }) {
-  const [options, setOptions] = useState([
-    { value: 'option1', label: 'Option 1' },
-    { value: 'option2', label: 'Option 2' },
-    { value: 'option3', label: 'Option 3' },
-  ]);
+  const [options, setOptions] = useState(
+    selectedCategories
+      .filter((category) => category.name !== 'All')
+      .map(({ name }) => ({
+        value: name,
+        label: name,
+      }))
+  );
 
   const handleCreate = (inputValue) => {
     const trimmedInput = inputValue.trim();
@@ -152,6 +156,12 @@ NewTaskInitial.propTypes = {
   taskDesc: PropTypes.string.isRequired,
   updateTaskDesc: PropTypes.func.isRequired,
   increaseNewTaskStage: PropTypes.func.isRequired,
+  selectedCategories: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      selected: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
 };
 
 export default NewTaskInitial;

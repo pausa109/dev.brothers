@@ -4,7 +4,7 @@ import './styles.css';
 import NewTaskInitial from '../NewTaskInitial';
 import NewTaskEnd from '../NewTaskEnd';
 
-function NewTask({ webStage, setWebStage, newTask, setTask, updateTasksData }) {
+function NewTask({ webStage, setWebStage, newTask, setTask, updateTasksData, selectedCategories }) {
   const [taskTitle, setTaskTitle] = useState('');
 
   const updateTaskTitle = (event) => {
@@ -121,6 +121,7 @@ function NewTask({ webStage, setWebStage, newTask, setTask, updateTasksData }) {
           taskDesc={taskDesc}
           updateTaskDesc={updateTaskDesc}
           increaseNewTaskStage={increaseNewTaskStage}
+          selectedCategories={selectedCategories}
         />
       ) : (
         <NewTaskEnd
@@ -166,6 +167,12 @@ NewTask.propTypes = {
   }).isRequired,
   setTask: PropTypes.func.isRequired,
   updateTasksData: PropTypes.func.isRequired,
+  selectedCategories: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      selected: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
 };
 
 export default NewTask;
