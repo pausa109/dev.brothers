@@ -5,52 +5,35 @@ import NewTask from './components/NewTask';
 import './App.css';
 
 function App() {
-  const categoryListStatic = [
-    { name: 'All', selected: true },
-    { name: 'ICC2', selected: true },
-    { name: 'Calc 2', selected: false },
-    { name: 'Tutoria', selected: false },
-    { name: 'Codelabs', selected: false },
-    { name: 'Estágio', selected: false },
-  ];
-
   const categoryCountStatic = [
     { category: 'In-Progress', count: 0, color: '#F49E85' },
     { category: 'Due late', count: 0, color: '#DF4E85' },
     { category: 'Completed', count: 0, color: '#7FC9FB' },
   ];
 
-  const ownerListStatic = [
-    { name: 'Rudinei Goularte', url: 'https://i.ibb.co/C8jswQC/rudinei.jpg' },
-  ];
+  // const ownerListStatic = [
+  //   { name: 'Rudinei Goularte', url: 'https://i.ibb.co/C8jswQC/rudinei.jpg' },
+  // ];
 
-  const [categoryList] = useState(categoryListStatic);
   const [categoryCount, setCategoryCount] = useState(categoryCountStatic);
-  const [ownerList] = useState(ownerListStatic);
   const [tasksData, addTasksData] = useState([]);
   const [webStage, setWebStage] = useState(0);
 
   const increaseCategoryCount = (taskType) => {
     setCategoryCount((prevCounts) =>
       prevCounts.map((item) =>
-        item.category === taskType
-          ? { ...item, count: item.count + 1 }
-          : item
+        item.category === taskType ? { ...item, count: item.count + 1 } : item
       )
     );
   };
-  
 
   const decreaseCategoryCount = (taskType) => {
     setCategoryCount((prevCounts) =>
       prevCounts.map((item) =>
-        item.category === taskType
-          ? { ...item, count: item.count - 1 }
-          : item
+        item.category === taskType ? { ...item, count: item.count - 1 } : item
       )
     );
   };
-  
 
   const calcularSomaCount = () => {
     let soma = 0;
@@ -66,7 +49,7 @@ function App() {
     desc: '',
     category: [],
     taskType: '',
-    owner: { name: '', photoUrl: '' },
+    owner: null,
     dates: [
       { type: 'createdDate', date: null, time: null },
       { type: 'deadlineDate', date: null, time: null },
@@ -89,6 +72,7 @@ function App() {
     );
     const updatedTask = {
       ...newTask,
+      id: uuidv4(),
       dates: newTask.dates.map((item) =>
         item.type === 'createdDate'
           ? {
@@ -100,18 +84,30 @@ function App() {
       ),
       taskType: createdDate > deadlineDate ? 'Due late' : 'In-Progress',
     };
-  
+
     addTasksData([...tasksData, updatedTask]);
-  
+
     if (createdDate > deadlineDate) {
       increaseCategoryCount('Due late');
     } else {
       increaseCategoryCount('In-Progress');
     }
-  
+    setTask({
+      id: uuidv4(),
+      title: '',
+      desc: '',
+      category: [],
+      taskType: '',
+      owner: null,
+      dates: [
+        { type: 'createdDate', date: null, time: null },
+        { type: 'deadlineDate', date: null, time: null },
+        { type: 'finishDate', date: null, time: null },
+      ],
+      music: '',
+    });
     setWebStage(0);
   };
-  
 
   const deleteTask = (taskId, taskType) => {
     const newTasksData = tasksData.filter((task) => task.id !== taskId);
@@ -127,14 +123,35 @@ function App() {
     hours = hours < 10 ? `0${hours}` : hours;
     minutes = minutes < 10 ? `0${minutes}` : minutes;
     const currentTime = `${hours}:${minutes}`;
-  
+
     addTasksData((prevState) =>
       prevState.map((task) => {
         if (task.id === taskId) {
           const previousTaskType = task.taskType;
-  
+          const deadlineDate = new Date(
+            `${task.dates.find((d) => d.type === 'deadlineDate').date}T${
+              task.dates.find((d) => d.type === 'deadlineDate').time
+            }:00`
+          );
+
           if (previousTaskType === 'Completed') {
             decreaseCategoryCount('Completed');
+            if (now > deadlineDate) {
+              increaseCategoryCount('Due late');
+              return {
+                ...task,
+                taskType: 'Due late',
+                dates: task.dates.map((item) =>
+                  item.type === 'finishDate'
+                    ? {
+                        ...item,
+                        time: null,
+                        date: null,
+                      }
+                    : item
+                ),
+              };
+            }
             increaseCategoryCount('In-Progress');
             return {
               ...task,
@@ -150,7 +167,7 @@ function App() {
               ),
             };
           }
-  
+
           decreaseCategoryCount(previousTaskType);
           increaseCategoryCount('Completed');
           return {
@@ -171,8 +188,6 @@ function App() {
       })
     );
   };
-  
-  
 
   useEffect(() => {
     const checkTaskStatus = () => {
@@ -198,9 +213,7 @@ function App() {
     <div>
       {webStage === 0 ? (
         <InitialPage
-          categoryList={categoryList}
           categoryCount={categoryCount}
-          ownerList={ownerList}
           tasksData={tasksData}
           webStage={webStage}
           setWebStage={setWebStage}

@@ -5,7 +5,7 @@ import { PiShootingStarLight } from 'react-icons/pi';
 import { LiaAngleLeftSolid } from 'react-icons/lia';
 import { TiCalendar } from 'react-icons/ti';
 import { LuAlarmClock } from 'react-icons/lu';
-import { IoIosImages } from 'react-icons/io';
+// import { IoIosImages } from 'react-icons/io';
 
 function NewTaskEnd({
   decreaseNewTaskStage,
@@ -13,10 +13,7 @@ function NewTaskEnd({
   updateTaskDeadlineDate,
   taskDeadlineTime,
   updateTaskDeadlineTime,
-  taskOwnerName,
-  updateTaskOwnerName,
-  ownerPhotoName,
-  handleFileChange,
+  // updateTaskOwner,
   taskMusic,
   updateTaskMusic,
   updateTasksData,
@@ -72,16 +69,19 @@ function NewTaskEnd({
           <div className="ownerNameContainer">
             <input
               type="text"
-              value={taskOwnerName}
-              onChange={updateTaskOwnerName}
+              // onChange={updateTaskOwnerName}
             />
             <h3>@</h3>
           </div>
         </div>
         <div className="ownerPhotoField">
           <h2>Task Owner Photo (optional)</h2>
-          <h3>Select the date you have to finish the task</h3>
-          <div className="sendFileContainer">
+          <h3>Enter the url of your task owner photo</h3>
+          <input
+            type="text"
+            // onChange={updateTaskOwnerName}
+          />
+          {/* <div className="sendFileContainer">
             <div className="sendTitle">
               <IoIosImages size={40} color="#373E68" />
               <h3>
@@ -101,7 +101,7 @@ function NewTaskEnd({
               multiple={false}
               onChange={handleFileChange}
             />
-          </div>
+          </div> */}
         </div>
         <div className="spotifyField">
           <div className="spotifyHeader">
@@ -137,10 +137,8 @@ NewTaskEnd.propTypes = {
   updateTaskDeadlineDate: PropTypes.func.isRequired,
   taskDeadlineTime: PropTypes.string.isRequired,
   updateTaskDeadlineTime: PropTypes.func.isRequired,
-  taskOwnerName: PropTypes.string.isRequired,
-  updateTaskOwnerName: PropTypes.func.isRequired,
-  ownerPhotoName: PropTypes.string.isRequired,
-  handleFileChange: PropTypes.func.isRequired,
+  // updateTaskOwner: PropTypes.func.isRequired,
+  // handleFileChange: PropTypes.func.isRequired,
   taskMusic: PropTypes.string.isRequired,
   updateTaskMusic: PropTypes.func.isRequired,
   updateTasksData: PropTypes.func.isRequired,

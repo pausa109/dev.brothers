@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { HiOutlineLightBulb } from 'react-icons/hi';
 import SideBar from '../SideBar';
@@ -6,9 +6,7 @@ import TaskList from '../TaskList';
 import './styles.css';
 
 function InitialPage({
-  categoryList,
   categoryCount,
-  ownerList,
   tasksData,
   webStage,
   setWebStage,
@@ -16,12 +14,80 @@ function InitialPage({
   handleTaskTypeChange,
   calcularSomaCount,
 }) {
+  const [selectedCategories, setSelectedCategories] = useState([
+    { name: 'All', selected: true },
+  ]);
+
+  const [filteredTasks, setFilteredTasks] = useState([]);
+
+  useEffect(() => {
+    const allCategories = tasksData.reduce((categories, task) => {
+      task.category.forEach((category) => {
+        if (!categories.includes(category)) {
+          categories.push(category);
+        }
+      });
+      return categories;
+    }, []);
+    setSelectedCategories([
+      { name: 'All', selected: true },
+      ...allCategories.map((category) => ({ name: category, selected: false })),
+    ]);
+  }, [tasksData]);
+
+  const [selectedOwners, setSelectedOwners] = useState([]);
+
+  useEffect(() => {
+    const allOwners = tasksData.reduce((owners, task) => {
+      if (
+        task.owner &&
+        !owners.find((owner) => owner.url === task.owner.photoUrl)
+      ) {
+        owners.push({
+          url: task.owner.photoUrl,
+          selected: false,
+        });
+      }
+      return owners;
+    }, []);
+    setSelectedOwners(allOwners);
+  }, [tasksData]);
+
+  useEffect(() => {
+    let newFilteredTasks = tasksData;
+
+    const isAllSelected = selectedCategories.find(
+      (category) => category.name === 'All' && category.selected
+    );
+    if (!isAllSelected) {
+      const selectedCategoryNames = selectedCategories
+        .filter((category) => category.selected)
+        .map((category) => category.name);
+      newFilteredTasks = newFilteredTasks.filter((task) =>
+        task.category.some((category) =>
+          selectedCategoryNames.includes(category)
+        )
+      );
+    }
+    if (selectedOwners.some((owner) => owner.selected)) {
+      const selectedOwnerNames = selectedOwners
+        .filter((owner) => owner.selected)
+        .map((owner) => owner.name);
+      newFilteredTasks = newFilteredTasks.filter(
+        (task) => task.owner && selectedOwnerNames.includes(task.owner.name)
+      );
+    }
+    setFilteredTasks(newFilteredTasks);
+  }, [tasksData, selectedCategories, selectedOwners]);
+
   return (
     <section className="container">
       <SideBar
-        categoryList={categoryList}
+        selectedCategories={selectedCategories}
         categoryCount={categoryCount}
-        ownerList={ownerList}
+        setSelectedCategories={setSelectedCategories}
+        selectedOwners={selectedOwners}
+        setSelectedOwners={setSelectedOwners}
       />
       <section className="main">
         <div>
@@ -45,7 +111,7 @@ function InitialPage({
         <div className="taskList">
           <TaskList
             categoryCount={categoryCount}
-            tasksData={tasksData}
+            tasksData={filteredTasks}
             deleteTask={deleteTask}
             handleTaskTypeChange={handleTaskTypeChange}
           />
@@ -56,22 +122,11 @@ function InitialPage({
 }
 
 InitialPage.propTypes = {
-  categoryList: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      selected: PropTypes.bool.isRequired,
-    })
-  ).isRequired,
   categoryCount: PropTypes.arrayOf(
     PropTypes.shape({
       category: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
       color: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  ownerList: PropTypes.arrayOf(
-    PropTypes.shape({
-      url: PropTypes.string.isRequired,
     })
   ).isRequired,
   tasksData: PropTypes.arrayOf(
