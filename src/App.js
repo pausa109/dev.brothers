@@ -25,32 +25,30 @@ function App() {
   ];
 
   const [categoryList] = useState(categoryListStatic);
-  const [categoryCount, setCategoryCount] = useState(categoryCountStatic);
+  const [categoryCount, setCategoryCount] = useState(() => {
+    const savedCategoryCount = JSON.parse(localStorage.getItem('categoryCount'));
+    return savedCategoryCount || categoryCountStatic;
+  });
+  
   const [ownerList] = useState(ownerListStatic);
-  const [tasksData, addTasksData] = useState([]);
+  const [tasksData, setTasksData] = useState(JSON.parse(localStorage.getItem('tasksData')) || []);
   const [webStage, setWebStage] = useState(0);
 
   const increaseCategoryCount = (taskType) => {
     setCategoryCount((prevCounts) =>
       prevCounts.map((item) =>
-        item.category === taskType
-          ? { ...item, count: item.count + 1 }
-          : item
+        item.category === taskType ? { ...item, count: item.count + 1 } : item
       )
     );
   };
   
-
   const decreaseCategoryCount = (taskType) => {
     setCategoryCount((prevCounts) =>
       prevCounts.map((item) =>
-        item.category === taskType
-          ? { ...item, count: item.count - 1 }
-          : item
+        item.category === taskType ? { ...item, count: item.count - 1 } : item
       )
     );
   };
-  
 
   const calcularSomaCount = () => {
     let soma = 0;
@@ -74,6 +72,10 @@ function App() {
     ],
     music: '',
   });
+
+  const saveTasksToStorage = (tasks) => {
+    localStorage.setItem('tasksData', JSON.stringify(tasks));
+  };
 
   const updateTasksData = () => {
     const now = new Date();
@@ -101,7 +103,10 @@ function App() {
       taskType: createdDate > deadlineDate ? 'Due late' : 'In-Progress',
     };
   
-    addTasksData([...tasksData, updatedTask]);
+    const updatedTasksData = [...tasksData, updatedTask];
+    setTasksData(updatedTasksData);
+  
+    saveTasksToStorage(updatedTasksData);
   
     if (createdDate > deadlineDate) {
       increaseCategoryCount('Due late');
@@ -116,7 +121,8 @@ function App() {
   const deleteTask = (taskId, taskType) => {
     const newTasksData = tasksData.filter((task) => task.id !== taskId);
     decreaseCategoryCount(taskType);
-    addTasksData(newTasksData);
+    setTasksData(newTasksData);
+    saveTasksToStorage(newTasksData);
   };
 
   const handleTaskTypeChange = (taskId) => {
@@ -127,12 +133,12 @@ function App() {
     hours = hours < 10 ? `0${hours}` : hours;
     minutes = minutes < 10 ? `0${minutes}` : minutes;
     const currentTime = `${hours}:${minutes}`;
-  
-    addTasksData((prevState) =>
+
+    setTasksData((prevState) =>
       prevState.map((task) => {
         if (task.id === taskId) {
           const previousTaskType = task.taskType;
-  
+
           if (previousTaskType === 'Completed') {
             decreaseCategoryCount('Completed');
             increaseCategoryCount('In-Progress');
@@ -150,7 +156,7 @@ function App() {
               ),
             };
           }
-  
+
           decreaseCategoryCount(previousTaskType);
           increaseCategoryCount('Completed');
           return {
@@ -171,21 +177,39 @@ function App() {
       })
     );
   };
-  
+
+  useEffect(() => {
+    const savedTasksData = localStorage.getItem('tasksData');
+    if (savedTasksData) {
+      setTasksData(JSON.parse(savedTasksData));
+    }
+  }, []);
+
+  useEffect(() => {
+    const savedCategoryCount = localStorage.getItem('categoryCount');
+    if (savedCategoryCount) {
+      setCategoryCount(JSON.parse(savedCategoryCount));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('tasksData', JSON.stringify(tasksData));
+    localStorage.setItem('categoryCount', JSON.stringify(categoryCount));
+  }, [tasksData, categoryCount]);
   
 
   useEffect(() => {
     const checkTaskStatus = () => {
       const now = new Date();
-      addTasksData((prevState) =>
+      setTasksData((prevState) =>
         prevState.map((task) => {
-          const deadlineDate = new Date(
-            `${task.dates.find((d) => d.type === 'deadlineDate').date}T${
-              task.dates.find((d) => d.type === 'deadlineDate').time
-            }:00`
-          );
-          if (now > deadlineDate && task.taskType !== 'Completed') {
-            return { ...task, taskType: 'Due late' };
+          const deadlineDateItem = task.dates.find((d) => d.type === 'deadlineDate');
+          const deadlineDate = deadlineDateItem ? new Date(`${deadlineDateItem.date}T${deadlineDateItem.time}:00`) : null;
+          if (deadlineDate && now > deadlineDate && task.taskType !== 'Completed') {
+            return {
+              ...task,
+              taskType: 'Due late',
+            };
           }
           return task;
         })
