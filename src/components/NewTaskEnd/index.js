@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import { PiShootingStarLight } from 'react-icons/pi';
@@ -13,11 +13,45 @@ function NewTaskEnd({
   updateTaskDeadlineDate,
   taskDeadlineTime,
   updateTaskDeadlineTime,
-  // updateTaskOwner,
   taskMusic,
   updateTaskMusic,
   updateTasksData,
+  setTask,
+  newTask,
 }) {
+  const [taskOwnerName, setTaskOwnerName] = useState('');
+  const [taskOwnerUrl, setTaskOwnerUrl] = useState('');
+
+  const updateTaskOwnerName = (event) => {
+    setTaskOwnerName(event.target.value);
+  };
+
+  const updateTaskOwnerUrl = (event) => {
+    setTaskOwnerUrl(event.target.value);
+  };
+
+  const [created, setCreated] = useState(false);
+
+  useEffect(() => {
+    if (created) {
+      updateTasksData();
+    }
+  }, [created]);
+
+  const updateTaskOwnerAll = () => {
+    if (taskOwnerName !== '' && taskOwnerUrl !== '') {
+      const taskAddOwner = {
+        ...newTask,
+        owner: {
+          name: taskOwnerName,
+          photoUrl: taskOwnerUrl,
+        },
+      };
+      setTask(taskAddOwner);
+    }
+    setCreated(true);
+  };
+
   return (
     <section className="containerInitialPageEnd">
       <div
@@ -69,7 +103,8 @@ function NewTaskEnd({
           <div className="ownerNameContainer">
             <input
               type="text"
-              // onChange={updateTaskOwnerName}
+              value={taskOwnerName}
+              onChange={updateTaskOwnerName}
             />
             <h3>@</h3>
           </div>
@@ -79,7 +114,8 @@ function NewTaskEnd({
           <h3>Enter the url of your task owner photo</h3>
           <input
             type="text"
-            // onChange={updateTaskOwnerName}
+            value={taskOwnerUrl}
+            onChange={updateTaskOwnerUrl}
           />
           {/* <div className="sendFileContainer">
             <div className="sendTitle">
@@ -120,8 +156,13 @@ function NewTaskEnd({
                 : 'none',
           }}
           role="button"
-          onClick={updateTasksData}
-          onKeyDown={updateTasksData}
+          onClick={() => {
+            updateTaskOwnerAll();
+          }}
+          onKeyDown={() => {
+            // updateTaskOwnerAll();
+            // updateTasksData();
+          }}
           tabIndex={0}
         >
           <h3>Create Task</h3>
@@ -132,16 +173,34 @@ function NewTaskEnd({
 }
 
 NewTaskEnd.propTypes = {
+  newTask: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    desc: PropTypes.string.isRequired,
+    taskType: PropTypes.string.isRequired,
+    owner: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      photoUrl: PropTypes.string.isRequired,
+    }),
+    category: PropTypes.arrayOf(PropTypes.string).isRequired,
+    dates: PropTypes.arrayOf(
+      PropTypes.shape({
+        type: PropTypes.string.isRequired,
+        date: PropTypes.string.isRequired,
+        time: PropTypes.string.isRequired,
+      })
+    ).isRequired,
+    music: PropTypes.string.isRequired,
+  }).isRequired,
   decreaseNewTaskStage: PropTypes.func.isRequired,
   taskDeadlineDate: PropTypes.string.isRequired,
   updateTaskDeadlineDate: PropTypes.func.isRequired,
   taskDeadlineTime: PropTypes.string.isRequired,
   updateTaskDeadlineTime: PropTypes.func.isRequired,
-  // updateTaskOwner: PropTypes.func.isRequired,
   // handleFileChange: PropTypes.func.isRequired,
   taskMusic: PropTypes.string.isRequired,
   updateTaskMusic: PropTypes.func.isRequired,
   updateTasksData: PropTypes.func.isRequired,
+  setTask: PropTypes.func.isRequired,
 };
 
 export default NewTaskEnd;

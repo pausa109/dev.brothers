@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 import { FaPencilAlt } from 'react-icons/fa';
@@ -22,6 +22,23 @@ function TaskList({
     finishDate: <TbCalendarHeart color="#3B4374" />,
   };
 
+  const [spotifySelect, setSpotifySelect] = useState('');
+
+  const updateSpotifySelect = (id) => {
+    if (spotifySelect === id) {
+      setSpotifySelect('');
+    } else {
+      setSpotifySelect(id);
+    }
+  };
+
+  const getSpotifyId = (url) => {
+    const parts = url.split('/');
+    const trackWithQuery = parts[parts.length - 1];
+    const track = trackWithQuery.split('?')[0];
+    return track;
+};
+
   return (
     <>
       {categoryCount.map((taskCategory) => {
@@ -30,10 +47,10 @@ function TaskList({
         );
 
         return (
-          <section>
+          <section key={taskCategory.category}>
             <h1>{`${taskCategory.category} [${taskCategory.count}]`}</h1>
             {filteredTasks.map((task) => (
-              <div>
+              <div key={task.id}>
                 <div
                   className="taskBar"
                   style={{ backgroundColor: taskCategory.color }}
@@ -73,7 +90,7 @@ function TaskList({
                       {task.dates.map((dateItem) => {
                         if (dateItem.date !== null) {
                           return (
-                            <div>
+                            <div key={dateItem.type}>
                               {datesIcon[dateItem.type]}
                               <h3>{dateItem.date}</h3>
                             </div>
@@ -85,18 +102,50 @@ function TaskList({
                   </div>
                   <div className="taskCategory">
                     {task.category.map((item) => (
-                      <span className="option">{item}</span>
+                      <span key={item} className="option">
+                        {item}
+                      </span>
                     ))}
                   </div>
-                  {task.owner !== null ? (
-                    <div className="taskOwner">
-                      <div
-                        style={{
-                          backgroundImage:
-                            'url("https://i.ibb.co/C8jswQC/rudinei.jpg")',
-                        }}
+                  <div className="taskFooter">
+                    {task.owner !== null ? (
+                      <div className="taskOwner">
+                        <div
+                          style={{
+                            backgroundImage: `url(${task.owner.photoUrl})`,
+                          }}
+                        />
+                        <h3>{task.owner.name}</h3>
+                      </div>
+                    ) : null}
+                    {task.music !== '' ? (
+                      <div>
+                        <div
+                          className="spotifyIcon"
+                          role="button"
+                          onClick={() => updateSpotifySelect(task.id)}
+                          onKeyDown={() => updateSpotifySelect(task.id)}
+                          tabIndex={0}
+                          aria-label="spotifyPlayer"
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                  {spotifySelect === task.id ? (
+                    <div>
+                      <iframe
+                        title="spotifyMusic"
+                        style={{ borderRadius: '12px' }}
+                        src={`https://open.spotify.com/embed/track/${getSpotifyId(
+                          task.music
+                        )}?utm_source=generator&theme=0`}
+                        width="90%"
+                        height="100"
+                        frameBorder="0"
+                        allowFullScreen=""
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy"
                       />
-                      <h3>Rudinei Goularte</h3>
                     </div>
                   ) : null}
                 </div>

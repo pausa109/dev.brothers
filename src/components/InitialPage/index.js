@@ -15,6 +15,8 @@ function InitialPage({
   calcularSomaCount,
   selectedCategories,
   setSelectedCategories,
+  selectedOwners,
+  setSelectedOwners,
 }) {
   const [filteredTasks, setFilteredTasks] = useState([]);
 
@@ -32,8 +34,6 @@ function InitialPage({
       ...allCategories.map((category) => ({ name: category, selected: false })),
     ]);
   }, [tasksData]);
-
-  const [selectedOwners, setSelectedOwners] = useState([]);
 
   useEffect(() => {
     const allOwners = tasksData.reduce((owners, task) => {
@@ -68,15 +68,60 @@ function InitialPage({
       );
     }
     if (selectedOwners.some((owner) => owner.selected)) {
-      const selectedOwnerNames = selectedOwners
+      const selectedOwnerUrls = selectedOwners
         .filter((owner) => owner.selected)
-        .map((owner) => owner.name);
-      newFilteredTasks = newFilteredTasks.filter(
-        (task) => task.owner && selectedOwnerNames.includes(task.owner.name)
-      );
+        .map((owner) => owner.url);
+      newFilteredTasks = newFilteredTasks
+        .filter((task) => task.owner !== null)
+        .filter(
+          (task) =>
+            task.owner.photoUrl &&
+            selectedOwnerUrls.includes(task.owner.photoUrl)
+        );
     }
     setFilteredTasks(newFilteredTasks);
   }, [tasksData, selectedCategories, selectedOwners]);
+
+  const categoryTotal = categoryCount.reduce(
+    (accumulator, item) => accumulator + item.count,
+    0
+  );
+
+  const inProgressTotal = categoryCount[0].count;
+  const dueLateTotal = categoryCount[1].count;
+
+  const segments = [];
+
+  if (inProgressTotal !== 0) {
+    const inProgressStart = 0;
+    const inProgressEnd = (inProgressTotal * 100) / categoryTotal;
+    segments.push({
+      color: '#F49E85',
+      start: inProgressStart,
+      end: inProgressEnd - 2.5,
+    });
+  }
+
+  if (dueLateTotal !== 0) {
+    const dueLateStart =
+      segments.length > 0 ? segments[segments.length - 1].end + 2.5 : 0;
+    const dueLateEnd =
+      dueLateStart + (dueLateTotal * 100) / categoryTotal - 2.5;
+    segments.push({ color: '#DF4E85', start: dueLateStart, end: dueLateEnd });
+  }
+
+  const completedStart =
+    segments.length > 0 ? segments[segments.length - 1].end + 2.5 : 0;
+  segments.push({ color: '#7FC9FB', start: completedStart, end: 100 });
+
+  const gradientParts = segments.flatMap((segment) => [
+    `${segment.color} ${segment.start}%`,
+    `${segment.color} ${segment.end}%`,
+  ]);
+  const style = {
+    background: `linear-gradient(to right, ${gradientParts.join(', ')})`,
+    opacity: categoryTotal === 0 ? 0 : 1,
+  };
 
   return (
     <section className="container">
@@ -104,7 +149,7 @@ function InitialPage({
               + Add Task
             </div>
           </div>
-          <div className="topbarProgress" />
+          <div className="topbarProgress" style={style} />
         </div>
         <div className="taskList">
           <TaskList
@@ -159,6 +204,13 @@ InitialPage.propTypes = {
       selected: PropTypes.bool.isRequired,
     })
   ).isRequired,
+  selectedOwners: PropTypes.arrayOf(
+    PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      selected: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
+  setSelectedOwners: PropTypes.func.isRequired,
 };
 
 export default InitialPage;

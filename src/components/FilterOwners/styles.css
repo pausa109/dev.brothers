@@ -4,7 +4,15 @@
   gap: 20px;
 }
 
-.filterByOwner div {
+.filterByOwner .photoFrame {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.filterByOwner .photoImage {
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -15,4 +23,9 @@
   font-size: 15px;
   font-weight: 700;
   color: #3B4374;
+}
+
+.ownersPhoto {
+  display: flex;
+  gap: 10px;
 }
