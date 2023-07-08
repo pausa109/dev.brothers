@@ -4,7 +4,14 @@ import './styles.css';
 import NewTaskInitial from '../NewTaskInitial';
 import NewTaskEnd from '../NewTaskEnd';
 
-function NewTask({ webStage, setWebStage, newTask, setTask, updateTasksData, selectedCategories }) {
+function NewTask({
+  webStage,
+  setWebStage,
+  newTask,
+  setTask,
+  updateTasksData,
+  selectedCategories,
+}) {
   const [taskTitle, setTaskTitle] = useState('');
 
   const updateTaskTitle = (event) => {
@@ -138,6 +145,8 @@ function NewTask({ webStage, setWebStage, newTask, setTask, updateTasksData, sel
           taskMusic={taskMusic}
           updateTaskMusic={updateTaskMusic}
           updateTasksData={updateTasksData}
+          setTask={setTask}
+          newTask={newTask}
         />
       )}
     </div>

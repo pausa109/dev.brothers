@@ -12,11 +12,15 @@ function App() {
   ];
 
   const [categoryCount, setCategoryCount] = useState(() => {
-    const savedCategoryCount = JSON.parse(localStorage.getItem('categoryCount'));
+    const savedCategoryCount = JSON.parse(
+      localStorage.getItem('categoryCount')
+    );
     return savedCategoryCount || categoryCountStatic;
   });
 
-  const [tasksData, setTasksData] = useState(JSON.parse(localStorage.getItem('tasksData')) || []);
+  const [tasksData, setTasksData] = useState(
+    JSON.parse(localStorage.getItem('tasksData')) || []
+  );
 
   const [webStage, setWebStage] = useState(0);
 
@@ -95,7 +99,6 @@ function App() {
 
     saveTasksToStorage(updatedTasksData);
 
-
     if (createdDate > deadlineDate) {
       increaseCategoryCount('Due late');
     } else {
@@ -134,7 +137,6 @@ function App() {
     minutes = minutes < 10 ? `0${minutes}` : minutes;
     const currentTime = `${hours}:${minutes}`;
 
-
     setTasksData((prevState) =>
       prevState.map((task) => {
         if (task.id === taskId) {
@@ -144,7 +146,6 @@ function App() {
               task.dates.find((d) => d.type === 'deadlineDate').time
             }:00`
           );
-
 
           if (previousTaskType === 'Completed') {
             decreaseCategoryCount('Completed');
@@ -220,15 +221,22 @@ function App() {
     localStorage.setItem('categoryCount', JSON.stringify(categoryCount));
   }, [tasksData, categoryCount]);
 
-
   useEffect(() => {
     const checkTaskStatus = () => {
       const now = new Date();
       setTasksData((prevState) =>
         prevState.map((task) => {
-          const deadlineDateItem = task.dates.find((d) => d.type === 'deadlineDate');
-          const deadlineDate = deadlineDateItem ? new Date(`${deadlineDateItem.date}T${deadlineDateItem.time}:00`) : null;
-          if (deadlineDate && now > deadlineDate && task.taskType !== 'Completed') {
+          const deadlineDateItem = task.dates.find(
+            (d) => d.type === 'deadlineDate'
+          );
+          const deadlineDate = deadlineDateItem
+            ? new Date(`${deadlineDateItem.date}T${deadlineDateItem.time}:00`)
+            : null;
+          if (
+            deadlineDate &&
+            now > deadlineDate &&
+            task.taskType !== 'Completed'
+          ) {
             return {
               ...task,
               taskType: 'Due late',
@@ -245,6 +253,48 @@ function App() {
     { name: 'All', selected: true },
   ]);
 
+  const getCategoryCount = (filtered, taskType) => {
+    const categorySum = filtered.filter((item) => item.taskType === taskType);
+    return categorySum.length;
+  };
+
+  const [selectedOwners, setSelectedOwners] = useState([]);
+
+  useEffect(() => {
+    let newFilteredTasks = tasksData;
+
+    const isAllSelected = selectedCategories.find(
+      (category) => category.name === 'All' && category.selected
+    );
+    if (!isAllSelected) {
+      const selectedCategoryNames = selectedCategories
+        .filter((category) => category.selected)
+        .map((category) => category.name);
+      newFilteredTasks = newFilteredTasks.filter((task) =>
+        task.category.some((category) =>
+          selectedCategoryNames.includes(category)
+        )
+      );
+    }
+    if (selectedOwners.some((owner) => owner.selected)) {
+      const selectedOwnerUrls = selectedOwners
+        .filter((owner) => owner.selected)
+        .map((owner) => owner.url);
+      newFilteredTasks = newFilteredTasks
+        .filter((task) => task.owner !== null)
+        .filter(
+          (task) =>
+            task.owner.photoUrl &&
+            selectedOwnerUrls.includes(task.owner.photoUrl)
+        );
+    }
+    const newCategoryCount = categoryCount.map((item) => ({
+      ...item,
+      count: getCategoryCount(newFilteredTasks, item.category),
+    }));
+    setCategoryCount(newCategoryCount);
+  }, [tasksData, selectedCategories, selectedOwners]);
+
   return (
     <div>
       {webStage === 0 ? (
@@ -258,6 +308,8 @@ function App() {
           calcularSomaCount={calcularSomaCount}
           selectedCategories={selectedCategories}
           setSelectedCategories={setSelectedCategories}
+          setSelectedOwners={setSelectedOwners}
+          selectedOwners={selectedOwners}
         />
       ) : (
         <NewTask

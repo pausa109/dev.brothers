@@ -6,7 +6,7 @@ function FilterOwners({ selectedOwners, setSelectedOwners }) {
   const handleOwnerClick = (clickedOwner) => {
     setSelectedOwners((prevOwners) =>
       prevOwners.map((owner) =>
-        owner.name === clickedOwner.name
+        owner.url === clickedOwner.url
           ? { ...owner, selected: !owner.selected }
           : owner
       )
@@ -16,19 +16,24 @@ function FilterOwners({ selectedOwners, setSelectedOwners }) {
   return (
     <section className="filterByOwner">
       <h1>Owners</h1>
-      {selectedOwners.map((owner, index) => (
-        <div
-          style={{
-            backgroundImage: `url(${owner.url}`,
-            border: owner.selected ? '2px solid blue' : 'none',
-          }}
-          role="button"
-          tabIndex={0}
-          onKeyDown={() => handleOwnerClick(owner)}
-          onClick={() => handleOwnerClick(owner)}
-          aria-label={`Owner ${index + 1}`}
-        />
-      ))}
+      <div className="ownersPhoto">
+        {selectedOwners.map((owner, index) => (
+          <div className="photoFrame">
+            <div
+              className="photoImage"
+              style={{
+                backgroundImage: `url(${owner.url}`,
+                border: owner.selected ? '2.5px solid #7A74ED' : 'none',
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={() => handleOwnerClick(owner)}
+              onClick={() => handleOwnerClick(owner)}
+              aria-label={`Owner ${index + 1}`}
+            />
+          </div>
+        ))}
+      </div>
     </section>
   );
 }

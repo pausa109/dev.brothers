@@ -50,7 +50,7 @@
 }
 
 .topbarProgress {
-  background: linear-gradient(to right, #F49E85 20%, #DF4E85 40%, #7FC9FB 60%);
+  background: linear-gradient(to right, #F49E85 0%, #F49E85 15%, #DF4E85 20%, #DF4E85 35%, #7FC9FB 40%, #7FC9FB 60%);
   height: 5px;
   border-radius: 0px 0px 10px 10px;
 }

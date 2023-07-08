@@ -94,8 +94,19 @@
 }
 
 .taskInfo iframe {
-  opacity: 0;
+  opacity: 1;
   position: absolute;
-  top: 95%;
-  right: 0%;
+  top: 90%;
+  right: 5%;
+  z-index: 999;
+}
+
+.taskFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.taskFooter .spotifyIcon {
+  cursor: pointer;
 }
